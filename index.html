@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple API Client</title>
+</head>
+<body>
+    <h2>Text File Editor</h2>
+    <textarea id="text" rows="10" cols="50"></textarea>
+    <br>
+    <button onclick="saveText()">Save</button>
+    <button onclick="loadText()">Load</button>
+
+    <script>
+        const API_URL = "http://127.0.0.1:5000";  // Use 5000 for Flask, 5000 for Express
+
+        async function loadText() {
+            let response = await fetch(`${API_URL}/read`);
+            let data = await response.json();
+            document.getElementById("text").value = data.content || "";
+        }
+
+        async function saveText() {
+            let text = document.getElementById("text").value;
+            await fetch(`${API_URL}/write`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text }),
+            });
+            alert("File saved!");
+        }
+    </script>
+</body>
+</html>
